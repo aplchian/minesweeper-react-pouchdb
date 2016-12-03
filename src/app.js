@@ -12,7 +12,6 @@ import Table from './components/table'
 import RecentScores from './components/recent-scores'
 import {getScores, addScore} from './helpers/db.js'
 import {initialState, newBoard, getUpdatedBoard} from './helpers/helpers'
-const db = new PouchDB('scores')
 
 
 const App = React.createClass({

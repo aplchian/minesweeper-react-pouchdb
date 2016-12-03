@@ -19,13 +19,13 @@ export default (props) => {
   }
 
   const row = item => {
-    return <tr {...rowStyle}> {map(cells,item)} </tr>
+    return <tr {...rowStyle}>{map(cells,item)}</tr>
   }
 
   return (
-    <table>
+    <tbody>
       {map(row,props.grid)}
-    </table>
+    </tbody>
   )
 
 }

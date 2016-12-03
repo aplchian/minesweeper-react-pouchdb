@@ -12,13 +12,18 @@ import Table from './components/table'
 import RecentScores from './components/recent-scores'
 import {getScores, addScore} from './helpers/db.js'
 import {initialState, newBoard, getUpdatedBoard} from './helpers/helpers'
+import actions from './actions'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 
 const App = React.createClass({
   getInitialState(){
-    return(initialState)
+    console.log('init',this.props)
+    return({...this.props.board})
   },
   componentDidMount(){
+    console.log('helloo',this.props)
     this.resetGame()
     this.updateScores()
   },
@@ -67,10 +72,7 @@ const App = React.createClass({
   },
   startTimer(){
     const fn = () => {
-      let time = this.state.time + 1
-      this.setState({
-        time: time
-      })
+      this.props.actions.incrementTime()
     }
     if(!this.state.running){
       this.interval = setInterval(fn,1000)
@@ -83,7 +85,13 @@ const App = React.createClass({
       })
     }
   },
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      time: nextProps.board.time
+    })
+  },
   render(){
+    console.log('log',this.props.board)
     let endState = this.checkEnd(this.state.board.state())
     let grid = this.state.board.grid()
     return(
@@ -101,4 +109,17 @@ const App = React.createClass({
   }
 })
 
-module.exports = App
+const mapStateToProps = (state) => {
+  return { board: state.board }
+}
+
+const mapDispatchtoProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+module.exports = connect(
+  mapStateToProps,
+  mapDispatchtoProps
+)(App)
